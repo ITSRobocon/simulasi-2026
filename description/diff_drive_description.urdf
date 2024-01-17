@@ -112,16 +112,20 @@
         <color rgba="0 1.0 1.0 1.0"/>
       </material>
     </visual>
-
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
         <sphere radius="${(wheel_radius+wheel_zoff-(base_height/2))}"/>
       </geometry>
     </collision>
-
     <xacro:sphere_inertia m="0.5" r="${(wheel_radius+wheel_zoff-(base_height/2))}"/>
+    
   </link>
+  <gazebo reference="front_caster">
+    <material>Gazebo/Black</material>
+    <mu1 value="0.0"/>
+    <mu2 value="0.0"/>
+  </gazebo>
 
   <joint name="caster_joint" type="fixed">
     <parent link="base_link"/>
@@ -273,14 +277,14 @@
   <joint name="lidar_joint" type="fixed">
     <parent link="base_link"/>
     <child link="lidar_link"/>
-    <origin xyz="0 0 0.12" rpy="0 0 0"/>
+    <origin xyz="0.265 0 -0.1" rpy="0 0 0"/>
   </joint>
     
   <gazebo reference="lidar_link">
     <sensor name="lidar" type="ray">
       <always_on>true</always_on>
       <visualize>true</visualize>
-      <update_rate>5</update_rate>
+      <update_rate>10</update_rate>
       <ray>
         <scan>
           <horizontal>
@@ -309,7 +313,7 @@
         <frame_name>lidar_link</frame_name>
       </plugin>
     </sensor>
-  </gazebo>
+  </gazebo>0
   
   <link name="camera_link">
     <visual>

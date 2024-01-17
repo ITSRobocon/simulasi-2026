@@ -13,9 +13,16 @@ find_package(ament_cmake REQUIRED)
 
 
 install(
-  DIRECTORY src launch rviz config worlds
+  DIRECTORY src launch rviz config worlds models description
   DESTINATION share/${PROJECT_NAME}
 )
+
+# Following hooks are used to ensure that the correct environment variables
+# will be set by exectuting 'sourece install/setup.bash' after compilation.
+# When using this template for your project, change the filenames of the
+# files in the 'hooks' folder, to correspond to your project name.
+ament_environment_hooks("${CMAKE_CURRENT_SOURCE_DIR}/env_hooks/${PROJECT_NAME}.dsv.in")
+ament_environment_hooks("${CMAKE_CURRENT_SOURCE_DIR}/env_hooks/${PROJECT_NAME}.sh.in")
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
