@@ -11,7 +11,10 @@
 
   <exec_depend>joint_state_publisher</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>slam_toolbox</exec_depend>
   <exec_depend>robot_localization</exec_depend>
+  <exec_depend>gazebo_ros</exec_depend>
+
   <exec_depend>rviz</exec_depend>
   <exec_depend>xacro</exec_depend>
 
@@ -20,9 +23,5 @@
 
   <export>
     <build_type>ament_cmake</build_type>
-<!-- 
-    <gazebo_ros gazebo_model_path="${prefix}/models"/>
-    <gazebo_ros gazebo_media_path="${prefix}/models"/> -->
-    
   </export>
 </package>
