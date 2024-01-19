@@ -16,7 +16,7 @@ from launch_ros.actions import Node
 def generate_launch_description():
     pkg_share = get_package_share_directory('diff_drive_description')
     default_model_path = os.path.join(pkg_share, 'description/diff_drive_description.urdf')
-    default_rviz_config_path = os.path.join(pkg_share, 'rviz/urdf_config.rviz')
+    default_rviz_config_path = os.path.join(pkg_share, 'rviz/navigation.rviz')
     world_path=os.path.join(pkg_share, 'worlds/my_world.sdf'),
 
     robot_state_publisher_node = Node(
@@ -52,19 +52,21 @@ def generate_launch_description():
         output='screen'
     )
     
-    robot_localization_node = Node(
-       package='robot_localization',
-       executable='ekf_node',
-       name='ekf_filter_node',
-       output='screen',
-       parameters=[os.path.join(pkg_share, 'config/ekf.yaml'), {'use_sim_time': LaunchConfiguration('use_sim_time')}]
+    localization = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([os.path.join(
+            pkg_share, 'launch'),'/localization.launch.py']
+        ),  
+
+        launch_arguments={
+            'use_sim_time': LaunchConfiguration('use_sim_time')
+        }.items()
     )
-    
-    slam = IncludeLaunchDescription(
-      PythonLaunchDescriptionSource([os.path.join(
-         get_package_share_directory('slam_toolbox'), 'launch'),
-         '/online_async_launch.py'])
-      )
+
+    navigation = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([os.path.join(
+            pkg_share, 'launch'),'/navigation.launch.py']
+        )
+    )
 
     return LaunchDescription([
         DeclareLaunchArgument(name='model', default_value=default_model_path,
@@ -77,7 +79,7 @@ def generate_launch_description():
         joint_state_publisher_node,
         robot_state_publisher_node,
         spawn_entity,
-        robot_localization_node,
         rviz_node,
-        slam
+        localization,
+        navigation
     ])
