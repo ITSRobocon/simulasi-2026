@@ -44,29 +44,14 @@ def generate_launch_description():
         executable='spawn_entity.py',
         arguments=['-entity', 'bot', 
                    '-topic', 'robot_description', 
-                   '-x', '5.5', 
-                   '-y', '5.7',
-                   '-z', '0.15',
+                   '-x', '0.0', 
+                   '-y', '0.0',
+                   '-z', '-3',
                    '-Y', '-1.57'
                   ],
         output='screen'
     )
     
-    localization = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([os.path.join(
-            pkg_share, 'launch'),'/localization.launch.py']
-        ),  
-
-        launch_arguments={
-            'use_sim_time': LaunchConfiguration('use_sim_time')
-        }.items()
-    )
-
-    navigation = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([os.path.join(
-            pkg_share, 'launch'),'/navigation.launch.py']
-        )
-    )
 
     return LaunchDescription([
         DeclareLaunchArgument(name='model', default_value=default_model_path,
@@ -79,7 +64,5 @@ def generate_launch_description():
         joint_state_publisher_node,
         robot_state_publisher_node,
         spawn_entity,
-        rviz_node,
-        localization,
-        navigation
+        rviz_node
     ])
