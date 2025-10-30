@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>simulasi-2025</name>
+  <name>simulasi-2026</name>
   <version>0.0.0</version>
   <description>TODO: Package description</description>
   <maintainer email="itsrobocon2@todo.todo">itsrobocon2</maintainer>

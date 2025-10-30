@@ -14,10 +14,11 @@ from launch_ros.actions import Node
 
 
 def generate_launch_description():
-    pkg_share = get_package_share_directory('simulasi-2025')
+    pkg_share = get_package_share_directory('simulasi-2026')
     default_model_path = os.path.join(pkg_share, 'description/diff_drive_description.urdf')
     default_rviz_config_path = os.path.join(pkg_share, 'rviz/navigation.rviz')
-    world_path=os.path.join(pkg_share, 'worlds/my_world.sdf'),
+    world_path=os.path.join(pkg_share, 'worlds/my_world.sdf')
+    joy_params_path = os.path.join(pkg_share, 'config/ps4_teleop.yaml')
 
     robot_state_publisher_node = Node(
         package='robot_state_publisher',
@@ -38,14 +39,29 @@ def generate_launch_description():
         output='screen',
         arguments=['-d', LaunchConfiguration('rvizconfig')],
     )
+
+    joy_node = Node(
+        package='joy',
+        executable='joy_node',
+        name='joy_node',
+        parameters=[{'dev': '/dev/input/js0'}] 
+    )
+
+    teleop_twist_joy_node = Node(
+        package='teleop_twist_joy',
+        executable='teleop_node',
+        name='teleop_node',
+        parameters=[joy_params_path],
+        remappings=[('/cmd_vel', '/cmd_vel')] 
+    )
  
     spawn_entity = Node(
         package='gazebo_ros',
         executable='spawn_entity.py',
         arguments=['-entity', 'bot', 
                    '-topic', 'robot_description', 
-                   '-x', '0.0', 
-                   '-y', '0.0',
+                   '-x', '0.8', 
+                   '-y', '5.5',
                    '-z', '0.2',
                    '-Y', '-1.57'
                   ],
@@ -60,9 +76,11 @@ def generate_launch_description():
                                             description='Absolute path to rviz config file'),
         DeclareLaunchArgument(name='use_sim_time', default_value='True',
                                             description='Flag to enable use_sim_time'),
-        ExecuteProcess(cmd=['gazebo', '--verbose', '-s', 'libgazebo_ros_init.so', '-s', 'libgazebo_ros_factory.so',world_path], output='screen'),
+        ExecuteProcess(cmd=['gazebo', '--verbose', '-s', 'libgazebo_ros_init.so', '-s', 'libgazebo_ros_factory.so', '--play-pause-off', world_path], output='screen'),
         joint_state_publisher_node,
         robot_state_publisher_node,
         spawn_entity,
-        rviz_node
+        rviz_node,
+        joy_node,                
+        teleop_twist_joy_node
     ])
