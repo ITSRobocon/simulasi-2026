@@ -16,5 +16,5 @@ source dependencies first
 ```
 source /usr/share/gazebo/setup.sh
 source install/setup.bash
-ros2 launch simulasi-2025 display.launch.py
+ros2 launch simulasi-2026 display.launch.py
 ```
