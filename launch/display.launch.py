@@ -16,7 +16,7 @@ from launch_ros.actions import Node
 def generate_launch_description():
     pkg_share = get_package_share_directory('simulasi-2026')
     default_model_path = os.path.join(pkg_share, 'description/diff_drive_description.urdf')
-    default_rviz_config_path = os.path.join(pkg_share, 'rviz/navigation.rviz')
+    default_rviz_config_path = os.path.join(pkg_share, 'rviz/magang.rviz')
     world_path=os.path.join(pkg_share, 'worlds/my_world.sdf')
     joy_params_path = os.path.join(pkg_share, 'config/ps4_teleop.yaml')
 
@@ -37,6 +37,7 @@ def generate_launch_description():
         executable='rviz2',
         name='rviz2',
         output='screen',
+        parameters=[{'use_sim_time': True}],
         arguments=['-d', LaunchConfiguration('rvizconfig')],
     )
 
